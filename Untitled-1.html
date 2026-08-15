@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sino Show10 - 林雪儿茶馆</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;700&family=Noto+Serif+Thai:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #f7f3e8;
+            --text-dark: #2c2724;
+            --accent-red: #8b2b22;
+            --gold: #bda063;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif Thai', 'Noto Serif SC', serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background-image: url('https://www.transparenttextures.com/patterns/rice-paper-2.png');
+        }
+
+        /* --- Page Management --- */
+        .page {
+            display: none;
+            min-height: 100vh;
+            width: 100vw;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- Landing Page --- */
+        #landing-page {
+            text-align: center;
+            background: linear-gradient(rgba(247,243,232,0.85), rgba(247,243,232,0.85)), url('https://images.unsplash.com/photo-1577083165350-14d232a4cc16?q=80&w=1920&auto=format&fit=crop') center/cover;
+        }
+
+        .ink-text {
+            opacity: 0;
+            filter: blur(8px);
+            transform: translateY(15px);
+            animation: inkDropFade 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        @keyframes inkDropFade {
+            0% { opacity: 0; filter: blur(8px); transform: translateY(15px); color: transparent; text-shadow: 0 0 15px rgba(44,39,36,0.8); }
+            100% { opacity: 1; filter: blur(0); transform: translateY(0); color: var(--text-dark); text-shadow: none; }
+        }
+
+        .cn-text { font-family: 'Ma Shan Zheng', cursive; font-size: 24px; line-height: 1.8; margin-bottom: 30px; letter-spacing: 2px; }
+        .en-text { font-family: 'Noto Serif SC', serif; font-size: 14px; line-height: 1.6; margin-bottom: 40px; color: #4a423b; }
+        
+        .delay-1 { animation-delay: 0.5s; }
+        .delay-3 { animation-delay: 2s; }
+
+        .enter-btn {
+            background-color: transparent;
+            border: 1.5px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 12px 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeInBtn 1.5s ease forwards 4s;
+            border-radius: 4px;
+        }
+        .enter-btn:hover {
+            background-color: var(--accent-red);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(139, 43, 34, 0.3);
+        }
+        .enter-btn .btn-cn { font-size: 15px; font-weight: bold; display: block; margin-bottom: 4px; }
+        .enter-btn .btn-en { font-size: 12px; display: block; }
+
+        @keyframes fadeInBtn { to { opacity: 1; } }
+
+        /* --- Booking Page --- */
+        .booking-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #eaeaea;
+        }
+        
+        .header-title { font-size: 32px; font-weight: bold; text-align: center; color: var(--accent-red); margin: 0; font-family: 'Georgia', serif;}
+        .header-sub-cn { font-size: 18px; text-align: center; margin: 5px 0; font-family: 'Ma Shan Zheng', cursive; color: #444; }
+        .header-sub-en { font-size: 12px; text-align: center; margin: 0 0 20px 0; letter-spacing: 1.5px; color: #666; }
+        
+        .quote-box {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+        .quote-cn { font-size: 18px; font-style: italic; margin-bottom: 10px; color: #444; }
+        .quote-th { font-size: 13px; color: #666; line-height: 1.5; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid #ccc;
+            border-radius: 4px; font-size: 15px; font-family: inherit;
+            box-sizing: border-box; transition: border 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--accent-red); outline: none; }
+        .form-group input[readonly] { background-color: #f5f5f5; color: #888; cursor: not-allowed; }
+        
+        .submit-btn {
+            width: 100%; padding: 15px; background-color: var(--accent-red);
+            color: #fff; border: none; font-size: 16px; cursor: pointer;
+            border-radius: 4px; transition: background 0.3s; font-weight: bold;
+        }
+        .submit-btn:hover { background-color: #6d2019; }
+
+        /* --- Ticket Page --- */
+        #ticket-page { background-color: #1a1614; }
+        .ticket-wrapper {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 2.1;
+            /* Gongbi style painting background */
+            background: url('https://images.unsplash.com/photo-1616442654865-06c8b92b6782?q=80&w=1600&auto=format&fit=crop') no-repeat center/cover;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 4px solid var(--gold);
+        }
+        .ticket-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.65) 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .ticket-inner-border {
+            border: 2px solid var(--gold);
+            height: 100%; width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed var(--gold);
+            padding-bottom: 10px;
+        }
+        .t-title { font-size: 28px; font-weight: bold; color: var(--accent-red); margin: 0; font-family: 'Georgia', serif; }
+        .t-sub { font-size: 16px; color: #555; }
+        .ticket-body {
+            flex-grow: 1; display: flex; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .t-zone-label { font-size: 18px; color: #666; margin-bottom: 5px; }
+        .t-zone-value { font-size: 42px; font-weight: bold; color: var(--accent-red); text-transform: uppercase; letter-spacing: 2px;}
+        .ticket-footer { text-align: center; font-size: 14px; color: #333; line-height: 1.4; font-weight: 600;}
+        
+        .t-footer-texts {
+            margin-top: 30px; text-align: center; max-width: 800px;
+        }
+        .t-footer-texts p { font-size: 14px; margin: 8px 0; color: #eee; font-weight: 300;}
+
+        /* Loader */
+        .loader-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.8); z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--accent-red); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            .ticket-wrapper { aspect-ratio: auto; min-height: 400px; }
+            .cn-text { font-size: 18px; }
+            .en-text { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader-overlay" id="loader">
+        <div class="spinner"></div>
+        <div style="font-weight: bold; color: var(--accent-red);">กำลังดำเนินการ...</div>
+    </div>
+
+    <!-- PAGE 1: LANDING -->
+    <div id="landing-page" class="page active">
+        <div class="cn-text ink-text delay-1">
+            ‘’车到山前必有路，船到桥头自然直‘’<br>
+            欢迎来到小女子林雪儿的茶馆。<br>
+            诸位贵客，既已掀帘步入茶馆，<br>
+            便请将一路的疲惫与心中的烦忧，暂且留在门外。<br>
+            放松身心，静下心来，仿佛踏过这道门槛，<br>
+            便是踏入了一处远离尘嚣、宁静祥和的天境。<br>
+            若诸位已经准备好了，请点击眼前的 Icon，<br>
+            掀开帘幕，正式踏入小女子的茶馆。<br>
+            愿诸位在此度过一段悠然惬意、令人心悦的时光。
+        </div>
+        <div class="en-text ink-text delay-3">
+            Welcome to the tea house of Lin Xue'er.<br>
+            To all honored guests who have lifted the curtain and stepped into this tea house,<br>
+            please leave your weariness and all the troubles in your heart at the door.<br>
+            Relax your body and quiet your mind.<br>
+            As though the moment you cross this threshold,<br>
+            you have stepped into a peaceful realm, far from the noise and chaos of the mortal world.<br>
+            If you are ready,<br>
+            please click the Icon before you<br>
+            to lift the curtain and officially enter my humble tea house.<br>
+            May you enjoy a peaceful, pleasant, and enchanting moment here.
+        </div>
+        <button class="enter-btn ink-text" onclick="enterTeaHouse()">
+            <span class="btn-cn">步入茶馆</span>
+            <span class="btn-en">(Enter the Tea House of Lin Xue'er)</span>
+        </button>
+    </div>
+
+    <!-- PAGE 2: BOOKING FORM -->
+    <div id="booking-page" class="page">
+        <div class="booking-container">
+            <h1 class="header-title">Sino Show10</h1>
+            <div class="header-sub-cn">林雪儿茶馆</div>
+            <div class="header-sub-en">LIN XUE'ER'S TEA HOUSE</div>
+            
+            <div class="quote-box">
+                <div class="quote-cn">‘’无可奈何花落去，似曾相识燕归来。‘’</div>
+                <div class="quote-th">ดอกไม้ไร้พลัง ย่อมต้องเหี่ยวเฉาและร่วงโรยไป<br>ถึงเวลาที่นกนางแอ่นที่ฉันเคยพบเห็นมาก่อนจะกลับมาแล้ว<br>- หยานซู (991-1055)</div>
+            </div>
+
+            <form id="bookingForm" onsubmit="submitForm(event)">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="fname" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Year</label>
+                    <select id="fyear" required>
+                        <option value="" disabled selected>Select your year</option>
+                        <option value="First-year student">First-year student</option>
+                        <option value="Sophomore">Sophomore</option>
+                        <option value="Junior">Junior</option>
+                        <option value="Senior">Senior</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>School of</label>
+                    <input type="text" id="fschool" required placeholder="Enter your school/faculty">
+                </div>
+
+                <div class="form-group">
+                    <label>Major</label>
+                    <input type="text" id="fmajor" required placeholder="Enter your major">
+                </div>
+
+                <div class="form-group">
+                    <label>Gmail</label>
+                    <input type="email" id="femail" required placeholder="example@gmail.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" id="fquantity" value="1" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Zone</label>
+                    <select id="fzone" required>
+                        <option value="" disabled selected>Select your zone</option>
+                        <option value="Zone A1 pop up stage">Zone A1 pop up stage</option>
+                        <option value="Zone A2 pop up stage">Zone A2 pop up stage</option>
+                        <option value="Zone A3 pop up stage">Zone A3 pop up stage</option>
+                        <option value="Zone B1">Zone B1</option>
+                        <option value="Zone B2">Zone B2</option>
+                        <option value="Zone C">Zone C</option>
+                        <option value="Zone D">Zone D</option>
+                        <option value="Zone E">Zone E</option>
+                        <option value="Zone F1">Zone F1</option>
+                        <option value="Zone F2">Zone F2</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">จองที่นั่ง / Book Seat</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAGE 3: TICKET -->
+    <div id="ticket-page" class="page">
+        <div class="ticket-wrapper" id="ticketArea">
+            <div class="ticket-overlay">
+                <div class="ticket-inner-border">
+                    <div class="ticket-header">
+                        <div class="t-title">Sino Show10</div>
+                        <div class="t-sub">林雪儿茶馆</div>
+                    </div>
+                    <div class="ticket-body">
+                        <div class="t-zone-label">ADMIT ONE - ZONE</div>
+                        <div class="t-zone-value" id="ticketZone">ZONE A1</div>
+                    </div>
+                    <div class="ticket-footer">
+                        Date: 31 Oct 2026 | Time: 17:30 | Venue: Indoor Stadium
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="t-footer-texts">
+            <p>โปรดบันทึกภาพหน้าจอเพื่อเก็บไว้เป็นหลักฐานการยืนยันที่นั่งก่อนการเข้ารับชมการแสดงSino Show10</p>
+            <p>Please save a screenshot as proof of your seat confirmation before attending the Sino Show10.</p>
+            <p>请截图保存作为确认座位的凭证，以便参加Sino Show10演出。</p>
+        </div>
+    </div>
+
+    <script>
+        // *** ข้อสำคัญ: อย่าลืมเปลี่ยน URL นี้เป็น URL Web App ของคุณเองหากมีการอัปเดตสคริปต์ ***
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5eM6tyZleWbcWJQ91o7cBEf0Grd_3Q0WsrV22zP_pzg0ZlJvKY2OSRV0BDo60s1Mr/exec";
+        
+        window.onload = () => {
+            const savedTicket = localStorage.getItem('sinoShowTicketZone_New');
+            if (savedTicket) {
+                showTicketPage(savedTicket);
+            }
+        };
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function enterTeaHouse() {
+            switchPage('booking-page');
+        }
+
+        async function submitForm(e) {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('fname').value,
+                year: document.getElementById('fyear').value,
+                school: document.getElementById('fschool').value,
+                major: document.getElementById('fmajor').value,
+                email: document.getElementById('femail').value.trim().toLowerCase(),
+                zone: document.getElementById('fzone').value
+            };
+
+            showLoader(true);
+
+            try {
+                const res = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                showLoader(false);
+
+                if (data.status === 'success') {
+                    localStorage.setItem('sinoShowTicketZone_New', data.zone);
+                    localStorage.setItem('sinoShowTicketEmail_New', payload.email);
+                    showTicketPage(data.zone);
+                } else if (data.status === 'already_booked') {
+                    alert("อีเมลนี้ได้ทำการจองที่นั่งไปแล้ว / This email has already booked a seat.");
+                    localStorage.setItem('sinoShowTicketZone_New', data.zone);
+                    showTicketPage(data.zone);
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + (data.message || 'Unknown error'));
+                }
+            } catch(err) {
+                showLoader(false);
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง / Connection error, please try again.");
+                console.error(err);
+            }
+        }
+
+        function showTicketPage(zoneName) {
+            document.getElementById('ticketZone').textContent = zoneName;
+            switchPage('ticket-page');
+        }
+
+        function showLoader(show) {
+            document.getElementById('loader').style.display = show ? 'flex' : 'none';
+        }
+    </script>
+</body>
+</html>
